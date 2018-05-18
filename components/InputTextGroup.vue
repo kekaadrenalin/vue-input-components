@@ -79,10 +79,10 @@
         if (this.isNotUseSpace && /\s/g.test(input)) return true;
 
         // cyrillic + symbol
-        if (this.isUseCyrillic && /[A-Z]/gi.test(input)) return true;
+        if (this.isUseCyrillic && /[^а-яё]/gi.test(input)) return true;
 
         // number
-        if (this.isNumber && !(/\d+/gi.test(input))) return true;
+        if (this.isNumber && !(/\d/gi.test(input))) return true;
 
         // email
         if (this.isEmail && !(/^.+@.+\..+$/i.test(input)) && this.onBlur) return true;
@@ -103,7 +103,9 @@
     },
     methods: {
       eventBlur() {
-        this.$store.commit(this.stepStore + _.camelCase(this.idName), _.upperFirst(this.input));
+        if (this.stepStore)
+          this.$store.commit(this.stepStore + _.camelCase(this.idName), _.upperFirst(this.input));
+
         this.onBlur = true;
       },
       validate() {
