@@ -1,0 +1,87 @@
+<template>
+    <div class="form-group" :class="[classObject, 'field-' + idName]">
+        <label class="control-label" :for="idName">{{ labelName }}</label>
+        <select class="form-control" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
+                @focus="onBlur = true">
+            <option value="0" disabled>Выбрать...</option>
+            <option v-for="option in dataSafe" :value="option.id">{{ option.text }}</option>
+        </select>
+    </div>
+</template>
+
+<script>
+  import _ from 'lodash';
+
+  export default {
+    name: 'select-simple-group',
+    data: function () {
+      return {
+        dataSafe: [],
+        selected: '',
+        onBlur: false
+      };
+    },
+    props: {
+      data: {
+        type: Array,
+        required: true
+      },
+      start: {
+        type: [String, Number],
+        default: null
+      },
+      isRequired: {
+        type: Boolean,
+        default: false
+      },
+      labelName: {
+        type: String,
+        required: true
+      },
+      idName: {
+        type: String,
+        required: true
+      },
+      stepStore: {
+        type: String,
+        default: ''
+      },
+    },
+    watch: {
+      selected: function () {
+        if (this.selected !== 0 && !this.hasError) {
+          this.$store.commit(this.stepStore + _.camelCase(this.idName), this.selected);
+        }
+      }
+    },
+    computed: {
+      hasError: function () {
+        if (this.selected === 0 && this.isRequired && this.onBlur) return true;
+      },
+      hasSuccess: function () {
+        if (this.selected !== 0 && this.onBlur && !this.hasError) return true;
+      },
+      classObject: function () {
+        return {
+          'has-error': this.hasError,
+          'has-success': this.hasSuccess,
+          'required': this.isRequired
+        };
+      }
+    },
+    created: function () {
+      this.selected = this.start;
+      this.dataSafe = this.data;
+
+      /*
+      if (null === this.selected && this.dataSafe.length) {
+        this.selected = _.head(this.dataSafe).id;
+      }
+      */
+
+      this.selected = 0;
+    }
+  }
+</script>
+
+<style></style>

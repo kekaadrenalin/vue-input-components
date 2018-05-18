@@ -1,3 +1,7 @@
-import InputTextGroup from 'InputTextGroup';
+import _InputTextGroup from 'components/InputTextGroup';
+import _InputTextMaskGroup from 'components/InputTextMaskGroup';
 
-export {InputTextGroup};
+const InputTextGroup = _InputTextGroup;
+const InputTextMaskGroup = _InputTextMaskGroup;
+
+export {InputTextGroup, InputTextMaskGroup};
