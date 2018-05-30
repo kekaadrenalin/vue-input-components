@@ -133,10 +133,11 @@
     },
     methods: {
       eventBlur() {
-        if (!this.isDebug && this.stepStore)
-          this.$store.commit(this.stepStore + _.camelCase(this.idName), _.upperFirst(this.input));
-
         this.onBlur = true;
+
+        if (!this.isDebug && this.stepStore && !!this.validate()) {
+          this.$store.commit(this.stepStore + _.camelCase(this.idName), _.upperFirst(this.input));
+        }
       },
       validate() {
         if (this.input.length < 1 && this.isRequired && this.onBlur) return false;
