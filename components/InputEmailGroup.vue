@@ -100,7 +100,7 @@
        */
       maxLength: {
         type: Number,
-        default: 255
+        default: 100
       },
 
       /**
