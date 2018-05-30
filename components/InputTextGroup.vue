@@ -1,9 +1,21 @@
 <template>
     <div class="form-group" :class="[classObject, 'field-' + idName]">
         <label class="control-label" :for="idName">{{ labelName }}</label>
-        <input :type="typeObject" class="form-control" :id="idName" ref="inputElement" v-model.trim="input"
-               :required="isRequired" :placeholder="placeholder" :disabled="isDisabled"
-               @blur="eventBlur" @focus="onBlur = false">
+
+        <input type="text" class="form-control"
+
+               v-model.trim="input"
+
+               :id="idName"
+               :placeholder="placeholder"
+
+               :required="isRequired"
+               :disabled="isDisabled"
+
+               @blur="eventBlur"
+               @focus="onBlur = false"
+
+               ref="inputElement">
     </div>
 </template>
 
@@ -19,50 +31,101 @@
       };
     },
     props: {
+      /**
+       * начальное значение
+       */
       start: {
         type: [String, Number, Boolean],
         default: '',
       },
-      placeholder: {
-        type: String,
-        default: ''
-      },
-      labelName: {
-        type: String,
-        required: true
-      },
+
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * запрет использования пробелов
+       */
       isNotUseSpace: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * запрет использования любых некириллических символов
+       */
       isUseCyrillic: {
         type: Boolean,
         default: false
       },
-      isEmail: {
-        type: Boolean,
-        default: false
+
+      /**
+       * label заголовок
+       */
+      labelName: {
+        type: String,
+        required: true
       },
-      isNumber: {
-        type: Boolean,
-        default: false
-      },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
-      stepStore: {
+
+      /**
+       * атрибут placeholder
+       */
+      placeholder: {
         type: String,
         default: ''
       },
+
+      /**
+       * атрибут disabled
+       */
       isDisabled: {
         type: Boolean,
         default: false
-      }
+      },
+
+      /**
+       * максимальная длина строки
+       */
+      maxLength: {
+        type: Number,
+        default: 255
+      },
+
+      /**
+       * минимальная длина строки
+       */
+      minLength: {
+        type: Number,
+        default: 1
+      },
+
+      /**
+       * префикс для vuex commit-а
+       */
+      stepStore: {
+        type: [String, Boolean],
+        default: false
+      },
+
+      /**
+       * режим отладки
+       */
+      isDebug: {
+        type: Boolean,
+        default: false
+      },
     },
     watch: {
       start() {
@@ -71,45 +134,28 @@
     },
     computed: {
       hasError() {
-        if (this.input.length < 1 && this.isRequired && this.onBlur) return true;
-
-        const input = String(this.input);
-
-        // space
-        if (this.isNotUseSpace && /\s/g.test(input)) return true;
-
-        // cyrillic + symbol
-        if (this.isUseCyrillic && /[^а-яё]/gi.test(input)) return true;
-
-        // number
-        if (this.isNumber && !(/\d/gi.test(input))) return true;
-
-        // email
-        if (this.isEmail && !(/^.+@.+\..+$/i.test(input)) && this.onBlur) return true;
+        return !this.validate();
       },
       hasSuccess() {
         if (this.input.length > 0 && this.onBlur && !this.hasError) return true;
       },
-      typeObject() {
-        return this.isEmail ? 'email' : 'text';
-      },
       classObject() {
         return {
-          'has-error': this.hasError,
-          'has-success': this.hasSuccess,
-          'required': this.isRequired
+          'has-error': !!this.hasError,
+          'has-success': !!this.hasSuccess,
+          'required': !!this.isRequired
         };
       }
     },
     methods: {
       eventBlur() {
-        if (this.stepStore)
+        if (!this.isDebug && this.stepStore)
           this.$store.commit(this.stepStore + _.camelCase(this.idName), _.upperFirst(this.input));
 
         this.onBlur = true;
       },
       validate() {
-        if (this.input.length < 1 && this.isRequired && this.onBlur) return false;
+        if (!this.input.length && this.isRequired && this.onBlur) return false;
 
         const input = String(this.input);
 
@@ -117,14 +163,15 @@
         if (this.isNotUseSpace && /\s/g.test(input)) return false;
 
         // cyrillic + symbol
-        if (this.isUseCyrillic && /[A-Z]/gi.test(input)) return false;
+        if (this.isUseCyrillic && /[^а-яё]/gi.test(input)) return false;
 
-        // email
-        return !(this.isEmail && !(/^.+@.+\..+$/i.test(input)) && this.onBlur);
+        if (input.length < this.minLength || input.length > this.maxLength) return false;
+
+        return true;
       },
     },
     created() {
-      this.input = this.start;
+      this.input = this.start ? this.start : '';
     }
   }
 </script>
