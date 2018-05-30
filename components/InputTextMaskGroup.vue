@@ -1,8 +1,23 @@
 <template>
     <div class="form-group" :class="[classObject, 'field-' + idName]">
         <label class="control-label" :for="idName">{{ labelName }}</label>
-        <input class="form-control" :id="idName" ref="inputElement" v-model.trim="input"
-               :required="isRequired" :placeholder="placeholder" @blur="onBlur = true" @focus="onBlur = false">
+
+        <input type="text" class="form-control"
+
+               v-model.trim="input"
+
+               :id="idName"
+               :placeholder="placeholder"
+
+               :required="isRequired"
+               :disabled="isDisabled"
+
+               @blur="eventBlur"
+               @focus="onBlur = false"
+
+               ref="inputElement">
+
+        <p>{{!this.hasError}}</p>
     </div>
 </template>
 
@@ -19,50 +34,84 @@
       };
     },
     props: {
+      /**
+       * начальное значение
+       */
       start: {
-        type: String,
-        default: ''
+        type: [String, Number, Boolean],
+        default: '',
       },
+
+      /**
+       * маска
+       */
       mask: {
         type: String,
         required: true
       },
-      placeholder: {
-        type: String,
-        default: ''
-      },
-      labelName: {
-        type: String,
-        required: true
-      },
+
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * label заголовок
+       */
+      labelName: {
+        type: String,
+        required: true
+      },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
-      stepStore: {
+
+      /**
+       * атрибут placeholder
+       */
+      placeholder: {
         type: String,
         default: ''
       },
-    },
-    watch: {
-      input: _.debounce(function () {
-        if (!this.hasError) {
-          this.$store.commit(this.stepStore + _.camelCase(this.idName), this.inputOutput);
-        }
-      }, 250)
+
+      /**
+       * атрибут disabled
+       */
+      isDisabled: {
+        type: Boolean,
+        default: false
+      },
+
+      /**
+       * префикс для vuex commit-а
+       */
+      stepStore: {
+        type: [String, Boolean],
+        default: false
+      },
+
+      /**
+       * режим отладки
+       */
+      isDebug: {
+        type: Boolean,
+        default: false
+      },
     },
     computed: {
       inputOutput: function () {
         return Inputmask.unmask(this.input, {alias: this.mask});
       },
       hasError: function () {
-        if (this.input.length < 1 && this.isRequired && this.onBlur) return true;
-
-        return !Inputmask.isValid(this.input, {alias: this.mask}) && this.onBlur;
+        if (this.onBlur && !this.validate()) return true;
       },
       hasSuccess: function () {
         if (this.input.length > 0 && this.onBlur && !this.hasError) return true;
@@ -74,6 +123,20 @@
           'required': this.isRequired
         };
       }
+    },
+    methods: {
+      eventBlur() {
+        this.onBlur = true;
+
+        if (!this.isDebug && this.stepStore && !!this.validate()) {
+          this.$store.commit(this.stepStore + _.camelCase(this.idName), _.upperFirst(this.inputOutput));
+        }
+      },
+      validate() {
+        if (this.input.length < 1 && this.isRequired && this.onBlur) return false;
+
+        return !(!Inputmask.isValid(this.input, {alias: this.mask}) && this.onBlur);
+      },
     },
     created: function () {
       this.input = this.start;
