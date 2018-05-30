@@ -48,22 +48,6 @@
       },
 
       /**
-       * запрет использования пробелов
-       */
-      isNotUseSpace: {
-        type: Boolean,
-        default: false
-      },
-
-      /**
-       * запрет использования любых некириллических символов
-       */
-      isUseCyrillic: {
-        type: Boolean,
-        default: false
-      },
-
-      /**
        * label заголовок
        */
       labelName: {
