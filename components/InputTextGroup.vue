@@ -134,7 +134,7 @@
     },
     computed: {
       hasError() {
-        return !this.validate();
+        if (this.onBlur && !this.validate()) return true;
       },
       hasSuccess() {
         if (this.input.length > 0 && this.onBlur && !this.hasError) return true;
@@ -165,9 +165,8 @@
         // cyrillic + symbol
         if (this.isUseCyrillic && /[^а-яё]/gi.test(input)) return false;
 
-        if (input.length < this.minLength || input.length > this.maxLength) return false;
-
-        return true;
+        // length
+        return !(input.length < this.minLength || input.length > this.maxLength);
       },
     },
     created() {
