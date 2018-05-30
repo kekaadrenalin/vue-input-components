@@ -16,8 +16,6 @@
                @focus="onBlur = false"
 
                ref="inputElement">
-
-        <p>{{!this.hasError}}</p>
     </div>
 </template>
 
@@ -118,9 +116,9 @@
       },
       classObject: function () {
         return {
-          'has-error': this.hasError,
-          'has-success': this.hasSuccess,
-          'required': this.isRequired
+          'has-error': !!this.hasError,
+          'has-success': !!this.hasSuccess,
+          'required': !!this.isRequired
         };
       }
     },
