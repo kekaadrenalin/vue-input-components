@@ -104,6 +104,11 @@
         default: false
       },
     },
+    watch: {
+      start() {
+        this.input = this.start ? this.start : '';
+      },
+    },
     computed: {
       inputOutput: function () {
         return Inputmask.unmask(this.input, {alias: this.mask});
@@ -137,7 +142,7 @@
       },
     },
     created: function () {
-      this.input = this.start;
+      this.input = this.start ? this.start : '';
     },
     mounted: function () {
       const element = this.$refs.inputElement;
