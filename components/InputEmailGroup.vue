@@ -136,7 +136,7 @@
         this.onBlur = true;
 
         if (!this.isDebug && this.stepStore && !!this.validate()) {
-          this.$store.commit(this.stepStore + _.camelCase(this.idName), _.upperFirst(this.input));
+          this.$store.commit(this.stepStore + _.camelCase(this.idName), _.toLower(this.input));
         }
       },
       validate() {
