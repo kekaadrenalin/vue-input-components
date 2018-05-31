@@ -1,8 +1,21 @@
 <template>
     <div class="form-group" :class="[classObject, 'field-' + idName]">
         <label class="control-label" :for="idName">{{ labelName }}</label>
-        <input class="form-control" type="tel" :id="idName" ref="inputElement" v-model.trim="input" :required="isRequired"
-               @focus="onBlur = true" :placeholder="placeholder">
+
+        <input class="form-control" type="tel"
+
+               v-model.trim="input"
+
+               :id="idName"
+               :placeholder="placeholder"
+
+               :required="isRequired"
+               :disabled="isDisabled"
+
+               @blur="eventBlur"
+               @focus="onBlur = true"
+
+               ref="inputElement">
     </div>
 </template>
 
@@ -19,64 +32,126 @@
       };
     },
     props: {
+      /**
+       * начальное значение
+       */
       start: {
-        type: String,
-        default: ''
+        type: [String, Number, Boolean],
+        default: '',
       },
-      placeholder: {
+
+      /**
+       * маска
+       */
+      mask: {
         type: String,
-        default: ''
+        default: '+7 (999) 999-9999'
       },
-      labelName: {
-        type: String,
-        required: true
-      },
+
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * label заголовок
+       */
+      labelName: {
+        type: String,
+        required: true
+      },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
-      stepStore: {
+
+      /**
+       * атрибут placeholder
+       */
+      placeholder: {
         type: String,
-        default: ''
+        default: '+7 (987) 654-3210'
+      },
+
+      /**
+       * атрибут disabled
+       */
+      isDisabled: {
+        type: Boolean,
+        default: false
+      },
+
+      /**
+       * префикс для vuex commit-а
+       */
+      stepStore: {
+        type: [String, Boolean],
+        default: false
+      },
+
+      /**
+       * режим отладки
+       */
+      isDebug: {
+        type: Boolean,
+        default: false
       },
     },
     watch: {
-      input: _.debounce(function () {
-        if (!this.hasError) {
-          this.$store.commit(this.stepStore + _.camelCase(this.idName), this.inputOutput);
-        }
-      }, 250)
+      start() {
+        this.input = this.start ? this.start : '';
+      },
     },
     computed: {
       inputOutput: function () {
-        return Inputmask.unmask(this.input, {alias: '+7 (999) 999-9999'});
+        return Inputmask.unmask(this.input, {alias: this.mask});
       },
       hasError: function () {
-        if (this.inputOutput.length < 10 && this.isRequired && this.onBlur) return true;
-
-        return !Inputmask.isValid(this.input, {alias: '+7 (999) 999-9999'}) && this.onBlur && this.isRequired;
+        if (this.onBlur && !this.validate()) return true;
       },
       hasSuccess: function () {
-        if (this.inputOutput.length === 10 && this.onBlur && !this.hasError) return true;
+        if (String(this.inputOutput).length === 10 && this.onBlur && !this.hasError) return true;
       },
       classObject: function () {
         return {
-          'has-error': this.hasError,
-          'has-success': this.hasSuccess,
-          'required': this.isRequired
+          'has-error': !!this.hasError,
+          'has-success': !!this.hasSuccess,
+          'required': !!this.isRequired
         };
       }
     },
+    methods: {
+      eventBlur() {
+        this.onBlur = true;
+
+        if (!this.isDebug && this.stepStore && !!this.validate()) {
+          this.$store.commit(this.stepStore + _.camelCase(this.idName), Number(this.inputOutput));
+        }
+      },
+      validate() {
+        if (String(this.inputOutput).length !== 10 && this.isRequired && this.onBlur) return false;
+
+        return !(!Inputmask.isValid(this.input, {alias: this.mask}) && this.onBlur);
+      },
+    },
     created: function () {
-      this.input = this.start;
+      this.input = this.start ? this.start : '';
     },
     mounted: function () {
       const element = this.$refs.inputElement;
-      Inputmask({'mask': '+7 (999) 999-9999'}).mask(element);
+      Inputmask({'mask': this.mask}).mask(element);
+    },
+    beforeDestroy: function () {
+      const element = this.$refs.inputElement;
+      if (element.inputmask)
+        element.inputmask.remove();
     }
   }
 </script>
