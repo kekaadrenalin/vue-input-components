@@ -5,25 +5,30 @@
                           is-required :is-disabled="disabled" :start="startRegion"
                           @change-region="changeRegion"></kladr-region>
         </div>
+
         <div class="col-xs-12 col-sm-6">
             <kladr-city label-name="Город" :id-name="idPrefixSafe + 'city'" :step-store="stepStore" ref="city"
                         is-required :start="startCity" :is-disabled="cityDisabled || disabled"></kladr-city>
         </div>
+
         <div class="col-xs-12 col-sm-6">
             <input-text-group label-name="Улица" :id-name="idPrefixSafe + 'street'"
                               :step-store="stepStore" ref="street" :start="startStreet" :is-disabled="disabled"
                               is-required></input-text-group>
         </div>
+
         <div class="col-xs-4 col-sm-2 xs-non-p-r">
             <input-text-group label-name="Дом" :id-name="idPrefixSafe + 'house'" is-not-use-space
                               :step-store="stepStore" ref="house" :start="startHouse" :is-disabled="disabled"
                               is-required></input-text-group>
         </div>
+
         <div class="col-xs-4 col-sm-2 xs-non-p-r xs-non-p-l">
             <input-text-group label-name="Строение" :id-name="idPrefixSafe + 'structure'" :is-disabled="disabled"
                               is-not-use-space :step-store="stepStore" ref="structure"
                               :start="startStructure"></input-text-group>
         </div>
+
         <div class="col-xs-4 col-sm-2 xs-non-p-l">
             <input-text-group label-name="Квартира" :id-name="idPrefixSafe + 'flat'" :is-disabled="disabled"
                               is-not-use-space :step-store="stepStore" ref="flat" :start="startFlat"></input-text-group>

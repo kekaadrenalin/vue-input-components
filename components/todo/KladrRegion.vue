@@ -275,42 +275,4 @@
   }
 </script>
 
-<style lang="scss">
-    @import '../assets/scss/main';
-
-    .kladr-geo {
-        position: relative;
-
-        &__input {
-            position: relative;
-            padding-right: $input-height-base + $padding-base-horizontal;
-        }
-
-        &__close {
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: $input-height-base;
-            width: $input-height-base;
-            color: currentColor;
-            cursor: pointer;
-
-            &::after,
-            &::before {
-                content: '';
-                position: absolute;
-                display: block;
-                right: 17px;
-                top: 6px;
-                width: 2px;
-                height: $input-height-base - 12px;
-                transform: rotate(45deg);
-                background: currentColor;
-            }
-
-            &::before {
-                transform: rotate(-45deg);
-            }
-        }
-    }
-</style>
+<style></style>
