@@ -147,6 +147,11 @@
     mounted: function () {
       const element = this.$refs.inputElement;
       Inputmask({'mask': this.mask}).mask(element);
+    },
+    beforeDestroy: function () {
+      const element = this.$refs.inputElement;
+      if (element.inputmask)
+        element.inputmask.remove();
     }
   }
 </script>
