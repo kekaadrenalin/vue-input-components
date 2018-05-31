@@ -125,7 +125,7 @@
     },
     watch: {
       start() {
-        this.input = this.start ? this.start : 0;
+        this.input = this.start ? this.start : null;
       },
     },
     computed: {
@@ -166,7 +166,7 @@
       },
     },
     created() {
-      this.input = this.start ? this.start : 0;
+      this.input = this.start ? this.start : null;
     }
   }
 </script>
