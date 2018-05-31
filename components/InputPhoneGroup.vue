@@ -132,7 +132,7 @@
         this.onBlur = true;
 
         if (!this.isDebug && this.stepStore && !!this.validate()) {
-          this.$store.commit(this.stepStore + _.camelCase(this.idName), Number(this.inputOutput));
+          this.$store.commit(this.stepStore + _.camelCase(this.idName), String(this.inputOutput));
         }
       },
       validate() {
