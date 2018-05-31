@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import InputTextGroup from './InputTextGroup';
+  import InputTextGroup from '../InputTextGroup';
   import KladrRegion from "./KladrRegion";
   import KladrCity from "./KladrCity";
 
