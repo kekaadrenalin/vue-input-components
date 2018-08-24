@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" :class="[classObject, 'field-' + idName]">
+    <div :class="[classObject, classWrap, 'field-' + idName]">
         <label class="control-label" :for="idName">{{ labelName }}</label>
 
         <input type="text" class="form-control"
@@ -109,6 +109,14 @@
       minLength: {
         type: Number,
         default: 1
+      },
+
+      /**
+       * class для обертки
+       */
+      classWrap: {
+        type: String,
+        default: 'form-group'
       },
 
       /**

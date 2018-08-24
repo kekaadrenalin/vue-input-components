@@ -1,13 +1,7 @@
-import _InputTextGroup from './components/InputTextGroup';
-import _InputTextMaskGroup from './components/InputTextMaskGroup';
-import _InputEmailGroup from './components/InputEmailGroup';
-import _InputPhoneGroup from './components/InputPhoneGroup';
-import _InputNumberGroup from './components/InputNumberGroup';
+import InputTextGroup from './components/input/InputTextGroup';
+import InputTextMaskGroup from './components/input/InputTextMaskGroup';
+import InputEmailGroup from './components/input/InputEmailGroup';
+import InputPhoneGroup from './components/input/InputPhoneGroup';
+import InputNumberGroup from './components/input/InputNumberGroup';
 
-const InputTextGroup = _InputTextGroup;
-const InputTextMaskGroup = _InputTextMaskGroup;
-const InputEmailGroup = _InputEmailGroup;
-const InputPhoneGroup = _InputPhoneGroup;
-const InputNumberGroup = _InputNumberGroup;
-
-export {InputTextGroup, InputTextMaskGroup, InputEmailGroup, InputPhoneGroup, InputNumberGroup};
+export { InputTextGroup, InputTextMaskGroup, InputEmailGroup, InputPhoneGroup, InputNumberGroup };
