@@ -67,10 +67,18 @@
         type: String,
         default: ''
       },
+
+      /**
+       * режим отладки
+       */
+      isDebug: {
+        type: Boolean,
+        default: false
+      },
     },
     watch: {
       selected: function (value) {
-        if (this.selected > 0 && !this.hasError) {
+        if (!this.isDebug && this.selected > 0 && !this.hasError) {
           this.$store.commit(this.stepStore + _.camelCase(this.idName), value);
         }
       }
