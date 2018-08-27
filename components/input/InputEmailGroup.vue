@@ -1,12 +1,13 @@
 <template>
-    <div class="form-group" :class="[classObject, 'field-' + idName]">
-        <label class="control-label" :for="idName">{{ labelName }}</label>
+    <div :class="[classObject, classWrap, 'field-' + idName]">
+        <label :class="classLabel" :for="idName">{{ labelName }}</label>
 
-        <input type="email" class="form-control"
+        <input type="email"
 
                v-model.trim="input"
 
                :id="idName"
+               :class="classInput"
                :placeholder="placeholder"
 
                :required="isRequired"
@@ -96,6 +97,30 @@
       },
 
       /**
+       * class для обертки
+       */
+      classWrap: {
+        type: String,
+        default: 'form-group'
+      },
+
+      /**
+       * class для label
+       */
+      classLabel: {
+        type: String,
+        default: 'form-label'
+      },
+
+      /**
+       * class для input
+       */
+      classInput: {
+        type: String,
+        default: 'form-control'
+      },
+
+      /**
        * префикс для vuex commit-а
        */
       stepStore: {
@@ -152,6 +177,7 @@
 
         // email
         return (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([а-яёa-z\-0-9]+\.)+[а-яёa-z]{2,}))$/i.test(input));
+
         // return ((/^(?:[а-яёa-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[а-яёa-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[а-яёa-z0-9](?:[а-яёa-z0-9-]*[а-яёa-z0-9])?\.)+[а-яёa-z0-9](?:[а-яёa-z0-9-]*[а-яёa-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[а-яёa-z0-9-]*[а-яёa-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i.test(input)) && this.onBlur);
         // return ((/^.+@.+[.].+$/i.test(input)) && this.onBlur);
       },
