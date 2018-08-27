@@ -1,8 +1,8 @@
 <template>
-    <div class="form-group" :class="[classObject, 'field-' + idName]">
-        <select class="form-control" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
+    <div :class="[classObject, classWrap, 'field-' + idName]">
+        <select :class="classSelect" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
                 @focus="onBlur = true">
-            <option value="0" disabled>Выбрать...</option>
+            <option value="0" disabled>{{ defaultValue }}</option>
             <option v-for="option in 31" :value="option">{{ option }}</option>
         </select>
     </div>
@@ -20,14 +20,49 @@
       };
     },
     props: {
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
+
+      /**
+       * значение дефолтного option-а
+       */
+      defaultValue: {
+        type: String,
+        default: 'Выбрать день...'
+      },
+
+      /**
+       * class для обертки
+       */
+      classWrap: {
+        type: String,
+        default: 'form-group'
+      },
+
+      /**
+       * class для select
+       */
+      classSelect: {
+        type: String,
+        default: 'form-control'
+      },
+
+      /**
+       * префикс для vuex commit-а
+       */
       stepStore: {
         type: String,
         default: ''
@@ -42,10 +77,10 @@
     },
     computed: {
       hasError: function () {
-        if (this.selected < 1 && this.isRequired && this.onBlur) return true;
+        if ((this.selected < 1 || this.selected > 31) && this.isRequired && this.onBlur) return true;
       },
       hasSuccess: function () {
-        if (this.selected > 0 && this.onBlur && !this.hasError) return true;
+        if (this.onBlur && !this.hasError) return true;
       },
       classObject: function () {
         return {
