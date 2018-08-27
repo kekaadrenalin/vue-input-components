@@ -1,12 +1,13 @@
 <template>
-    <div class="form-group" :class="[classObject, 'field-' + idName]">
-        <label class="control-label" :for="idName">{{ labelName }}</label>
+    <div :class="[classObject, classWrap, 'field-' + idName]">
+        <label :class="classLabel" :for="idName">{{ labelName }}</label>
 
-        <input type="number" class="form-control"
+        <input type="number"
 
                v-model.number="input"
 
                :id="idName"
+               :class="classInput"
                :placeholder="placeholder"
 
                :min="minValue"
@@ -108,6 +109,30 @@
       },
 
       /**
+       * class для обертки
+       */
+      classWrap: {
+        type: String,
+        default: 'form-group'
+      },
+
+      /**
+       * class для label
+       */
+      classLabel: {
+        type: String,
+        default: 'form-label'
+      },
+
+      /**
+       * class для input
+       */
+      classInput: {
+        type: String,
+        default: 'form-control'
+      },
+
+      /**
        * префикс для vuex commit-а
        */
       stepStore: {
@@ -154,15 +179,13 @@
       validate() {
         if (String(this.input).length < 1 && this.isRequired && this.onBlur) return false;
 
+        // not number
+        if (/[^0-9]/g.test(String(this.input))) return false;
+
         const input = Number(this.input);
 
         // min + max
-        if (input < this.minValue || input > this.maxValue) return false;
-
-        // not number
-        return !/[^0-9]/g.test(String(input));
-
-
+        return !(input < this.minValue || input > this.maxValue);
       },
     },
     created() {
