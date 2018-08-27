@@ -5,6 +5,7 @@ import InputPhoneGroup from './components/input/InputPhoneGroup';
 import InputNumberGroup from './components/input/InputNumberGroup';
 
 import SelectDayGroup from './components/select/SelectDayGroup';
+import SelectMonthGroup from './components/select/SelectMonthGroup';
 
 export { InputTextGroup, InputTextMaskGroup, InputEmailGroup, InputPhoneGroup, InputNumberGroup };
-export { SelectDayGroup };
+export { SelectDayGroup, SelectMonthGroup };

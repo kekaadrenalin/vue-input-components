@@ -1,8 +1,8 @@
 <template>
-    <div class="form-group" :class="[classObject, 'field-' + idName]">
-        <select class="form-control" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
+    <div :class="[classObject, classWrap, 'field-' + idName]">
+        <select :class="classSelect" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
                 @focus="onBlur = true">
-            <option value="0" disabled>Выбрать...</option>
+            <option value="0" disabled>{{ defaultValue }}</option>
             <option v-for="option in month" :value="option.id">{{ option.text }}</option>
         </select>
     </div>
@@ -65,37 +65,80 @@
             text: 'Декабря'
           }
         ],
-        selected: '',
+        selected: 0,
         onBlur: false
       };
     },
     props: {
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
+
+      /**
+       * значение дефолтного option-а
+       */
+      defaultValue: {
+        type: String,
+        default: 'Выбрать день...'
+      },
+
+      /**
+       * class для обертки
+       */
+      classWrap: {
+        type: String,
+        default: 'form-group'
+      },
+
+      /**
+       * class для select
+       */
+      classSelect: {
+        type: String,
+        default: 'form-control'
+      },
+
+      /**
+       * префикс для vuex commit-а
+       */
       stepStore: {
         type: String,
         default: ''
       },
+
+      /**
+       * режим отладки
+       */
+      isDebug: {
+        type: Boolean,
+        default: false
+      },
     },
     watch: {
       selected: function (value) {
-        if (this.selected > 0 && !this.hasError) {
+        if (!this.isDebug && this.stepStore && this.selected > 0 && !this.hasError) {
           this.$store.commit(this.stepStore + _.camelCase(this.idName), value);
         }
       }
     },
     computed: {
       hasError: function () {
-        if (this.selected < 1 && this.isRequired && this.onBlur) return true;
+        if ((this.selected < 1 || this.selected > 12) && this.isRequired && this.onBlur) return true;
       },
       hasSuccess: function () {
-        if (this.selected > 0 && this.onBlur && !this.hasError) return true;
+        if (this.onBlur && !this.hasError) return true;
       },
       classObject: function () {
         return {
@@ -104,9 +147,6 @@
           'required': this.isRequired
         };
       }
-    },
-    created: function () {
-      this.selected = 0;
     }
   }
 </script>
