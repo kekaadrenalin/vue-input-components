@@ -14,7 +14,6 @@ yarn-error.log*
 *.sln
 /build/
 /config/
-/src/
 /static/
 /.eslintignore
 /.postcssrc.js
@@ -23,4 +22,6 @@ yarn-error.log*
 /index.html
 /README.md
 /.babelrc
-/components/todo/
+/src/components/todo/
+/src/main.js
+/src/App.vue
