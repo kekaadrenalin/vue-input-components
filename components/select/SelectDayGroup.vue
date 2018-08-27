@@ -15,7 +15,7 @@
     name: 'select-day-group',
     data: function () {
       return {
-        selected: '',
+        selected: 0,
         onBlur: false
       };
     },
