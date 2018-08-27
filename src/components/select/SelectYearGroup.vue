@@ -5,8 +5,6 @@
             <option value="0" disabled>{{ defaultValue }}</option>
             <option v-for="option in years" :value="option">{{ option }}</option>
         </select>
-
-        {{ years }}
     </div>
 </template>
 
@@ -22,14 +20,6 @@
     }),
     props: {
       /**
-       * корректор максимальной даты
-       */
-      startCorrect: {
-        type: Number,
-        default: 0
-      },
-
-      /**
        * обязательное ли поле
        */
       isRequired: {
@@ -43,6 +33,22 @@
       idName: {
         type: String,
         required: true
+      },
+
+      /**
+       * корректор max даты
+       */
+      startCorrect: {
+        type: Number,
+        default: 0
+      },
+
+      /**
+       * разница между max и min
+       */
+      diffYears: {
+        type: Number,
+        default: 90
       },
 
       /**
@@ -109,16 +115,12 @@
     },
     created() {
       let currentYear = Number(new Date().getFullYear()) - this.startCorrect,
-        endYear = 90;
-      if (this.selected == null) this.selected = currentYear;
+        endYear = this.diffYears;
 
       while (endYear > 0) {
         endYear--;
         this.years.push(currentYear--);
       }
-
-      // this.selected = this.years[0];
-      this.selected = 0;
     }
   }
 </script>
