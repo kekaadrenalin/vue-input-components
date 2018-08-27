@@ -1,12 +1,13 @@
 <template>
     <div :class="[classObject, classWrap, 'field-' + idName]">
-        <label class="control-label" :for="idName">{{ labelName }}</label>
+        <label :class="classLabel" :for="idName">{{ labelName }}</label>
 
-        <input type="text" class="form-control"
+        <input type="text"
 
                v-model.trim="input"
 
                :id="idName"
+               :class="classInput"
                :placeholder="placeholder"
 
                :required="isRequired"
@@ -120,6 +121,22 @@
       },
 
       /**
+       * class для label
+       */
+      classLabel: {
+        type: String,
+        default: 'form-label'
+      },
+
+      /**
+       * class для input
+       */
+      classInput: {
+        type: String,
+        default: 'form-control'
+      },
+
+      /**
        * префикс для vuex commit-а
        */
       stepStore: {
@@ -172,7 +189,7 @@
         if (this.isNotUseSpace && /\s/g.test(input)) return false;
 
         // cyrillic + symbol
-        if (this.isUseCyrillic && /[^а-яё]/gi.test(input)) return false;
+        if (this.isUseCyrillic && /[^а-яё\-]/gi.test(input)) return false;
 
         // length
         return !(input.length < this.minLength || input.length > this.maxLength);
