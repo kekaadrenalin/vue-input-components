@@ -25,12 +25,10 @@
 
   export default {
     name: 'input-text-group',
-    data() {
-      return {
-        input: '',
-        onBlur: false,
-      };
-    },
+    data: () => ({
+      input: '',
+      onBlur: false,
+    }),
     props: {
       /**
        * начальное значение

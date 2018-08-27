@@ -29,12 +29,10 @@
 
   export default {
     name: 'input-number-group',
-    data() {
-      return {
-        input: '',
-        onBlur: false,
-      };
-    },
+    data: () => ({
+      input: '',
+      onBlur: false,
+    }),
     props: {
       /**
        * начальное значение

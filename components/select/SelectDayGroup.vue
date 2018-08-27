@@ -13,12 +13,10 @@
 
   export default {
     name: 'select-day-group',
-    data: function () {
-      return {
-        selected: 0,
-        onBlur: false
-      };
-    },
+    data: () => ({
+      selected: 0,
+      onBlur: false
+    }),
     props: {
       /**
        * обязательное ли поле
@@ -77,20 +75,20 @@
       },
     },
     watch: {
-      selected: function (value) {
+      selected(value) {
         if (!this.isDebug && this.stepStore && this.selected > 0 && !this.hasError) {
           this.$store.commit(this.stepStore + _.camelCase(this.idName), value);
         }
       }
     },
     computed: {
-      hasError: function () {
+      hasError() {
         if ((this.selected < 1 || this.selected > 31) && this.isRequired && this.onBlur) return true;
       },
-      hasSuccess: function () {
+      hasSuccess() {
         if (this.onBlur && !this.hasError) return true;
       },
-      classObject: function () {
+      classObject() {
         return {
           'has-error': this.hasError,
           'has-success': this.hasSuccess,

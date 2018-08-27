@@ -25,12 +25,10 @@
 
   export default {
     name: 'input-email-group',
-    data() {
-      return {
+    data: () => ({
         input: '',
         onBlur: false,
-      };
-    },
+    }),
     props: {
       /**
        * начальное значение

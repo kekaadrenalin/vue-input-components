@@ -26,12 +26,10 @@
 
   export default {
     name: 'input-phone-group',
-    data() {
-      return {
-        input: '',
-        onBlur: false
-      };
-    },
+    data: () => ({
+      input: '',
+      onBlur: false
+    }),
     props: {
       /**
        * начальное значение
@@ -135,16 +133,16 @@
       },
     },
     computed: {
-      inputOutput: function () {
+      inputOutput() {
         return Inputmask.unmask(this.input, {alias: this.mask});
       },
-      hasError: function () {
+      hasError() {
         if (this.onBlur && !this.validate()) return true;
       },
-      hasSuccess: function () {
+      hasSuccess() {
         if (String(this.inputOutput).length === 10 && this.onBlur && !this.hasError) return true;
       },
-      classObject: function () {
+      classObject() {
         return {
           'has-error': !!this.hasError,
           'has-success': !!this.hasSuccess,
@@ -166,14 +164,14 @@
         return !(!Inputmask.isValid(this.input, {alias: this.mask}) && this.onBlur);
       },
     },
-    created: function () {
+    created() {
       this.input = this.start ? this.start : '';
     },
-    mounted: function () {
+    mounted() {
       const element = this.$refs.inputElement;
       Inputmask({'mask': this.mask}).mask(element);
     },
-    beforeDestroy: function () {
+    beforeDestroy() {
       const element = this.$refs.inputElement;
       if (element.inputmask)
         element.inputmask.remove();

@@ -13,62 +13,60 @@
 
   export default {
     name: 'select-month-group',
-    data: function () {
-      return {
-        month: [
-          {
-            id: 1,
-            text: 'Января'
-          },
-          {
-            id: 2,
-            text: 'Февраля'
-          },
-          {
-            id: 3,
-            text: 'Марта'
-          },
-          {
-            id: 4,
-            text: 'Апреля'
-          },
-          {
-            id: 5,
-            text: 'Мая'
-          },
-          {
-            id: 6,
-            text: 'Июня'
-          },
-          {
-            id: 7,
-            text: 'Июля'
-          },
-          {
-            id: 8,
-            text: 'Августа'
-          },
-          {
-            id: 9,
-            text: 'Сентября'
-          },
-          {
-            id: 10,
-            text: 'Октября'
-          },
-          {
-            id: 11,
-            text: 'Ноября'
-          },
-          {
-            id: 12,
-            text: 'Декабря'
-          }
-        ],
-        selected: 0,
-        onBlur: false
-      };
-    },
+    data: () => ({
+      month: [
+        {
+          id: 1,
+          text: 'Января'
+        },
+        {
+          id: 2,
+          text: 'Февраля'
+        },
+        {
+          id: 3,
+          text: 'Марта'
+        },
+        {
+          id: 4,
+          text: 'Апреля'
+        },
+        {
+          id: 5,
+          text: 'Мая'
+        },
+        {
+          id: 6,
+          text: 'Июня'
+        },
+        {
+          id: 7,
+          text: 'Июля'
+        },
+        {
+          id: 8,
+          text: 'Августа'
+        },
+        {
+          id: 9,
+          text: 'Сентября'
+        },
+        {
+          id: 10,
+          text: 'Октября'
+        },
+        {
+          id: 11,
+          text: 'Ноября'
+        },
+        {
+          id: 12,
+          text: 'Декабря'
+        }
+      ],
+      selected: 0,
+      onBlur: false
+    }),
     props: {
       /**
        * обязательное ли поле
@@ -127,20 +125,20 @@
       },
     },
     watch: {
-      selected: function (value) {
+      selected(value) {
         if (!this.isDebug && this.stepStore && this.selected > 0 && !this.hasError) {
           this.$store.commit(this.stepStore + _.camelCase(this.idName), value);
         }
       }
     },
     computed: {
-      hasError: function () {
+      hasError() {
         if ((this.selected < 1 || this.selected > 12) && this.isRequired && this.onBlur) return true;
       },
-      hasSuccess: function () {
+      hasSuccess() {
         if (this.onBlur && !this.hasError) return true;
       },
-      classObject: function () {
+      classObject() {
         return {
           'has-error': this.hasError,
           'has-success': this.hasSuccess,
