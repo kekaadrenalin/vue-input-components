@@ -97,9 +97,6 @@
           'required': this.isRequired
         };
       }
-    },
-    created: function () {
-      this.selected = 0;
     }
   }
 </script>
