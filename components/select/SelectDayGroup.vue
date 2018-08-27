@@ -78,7 +78,7 @@
     },
     watch: {
       selected: function (value) {
-        if (!this.isDebug && this.selected > 0 && !this.hasError) {
+        if (!this.isDebug && this.stepStore && this.selected > 0 && !this.hasError) {
           this.$store.commit(this.stepStore + _.camelCase(this.idName), value);
         }
       }
