@@ -1,12 +1,13 @@
 <template>
-    <div class="form-group" :class="[classObject, 'field-' + idName]">
-        <label class="control-label" :for="idName">{{ labelName }}</label>
+    <div :class="[classObject, classWrap, 'field-' + idName]">
+        <label :class="classLabel" :for="idName">{{ labelName }}</label>
 
-        <input type="text" class="form-control"
+        <input type="text"
 
                v-model.trim="input"
 
                :id="idName"
+               :class="classInput"
                :placeholder="placeholder"
 
                :required="isRequired"
@@ -86,6 +87,30 @@
       isDisabled: {
         type: Boolean,
         default: false
+      },
+
+      /**
+       * class для обертки
+       */
+      classWrap: {
+        type: String,
+        default: 'form-group'
+      },
+
+      /**
+       * class для label
+       */
+      classLabel: {
+        type: String,
+        default: 'form-label'
+      },
+
+      /**
+       * class для input
+       */
+      classInput: {
+        type: String,
+        default: 'form-control'
       },
 
       /**
