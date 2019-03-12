@@ -8,5 +8,7 @@ import SelectDayGroup from './components/select/SelectDayGroup'
 import SelectMonthGroup from './components/select/SelectMonthGroup'
 import SelectYearGroup from './components/select/SelectYearGroup'
 
+import SelectSimpleGroup from './components/select/SelectSimpleGroup'
+
 export { InputTextGroup, InputTextMaskGroup, InputEmailGroup, InputPhoneGroup, InputNumberGroup }
-export { SelectDayGroup, SelectMonthGroup, SelectYearGroup }
+export { SelectDayGroup, SelectMonthGroup, SelectYearGroup, SelectSimpleGroup }

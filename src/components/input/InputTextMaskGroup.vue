@@ -133,6 +133,10 @@
     },
     computed: {
       inputOutput() {
+        if (typeof Inputmask === "undefined") {
+          return this.input;
+        }
+
         return Inputmask.unmask(this.input, {alias: this.mask});
       },
       hasError() {
