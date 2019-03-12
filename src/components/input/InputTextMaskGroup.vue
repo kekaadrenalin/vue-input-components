@@ -22,7 +22,6 @@
 
 <script>
   import _ from 'lodash';
-  import Inputmask from 'inputmask';
 
   export default {
     name: 'input-text-mask-group',
@@ -168,6 +167,10 @@
       this.input = this.start ? this.start : '';
     },
     mounted() {
+      if (window.Inputmask === undefined) {
+        console.error('Inputmask undefined!')
+      }
+
       const element = this.$refs.inputElement;
       Inputmask({'mask': this.mask}).mask(element);
     },
