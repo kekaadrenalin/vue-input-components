@@ -188,6 +188,7 @@
 
         // cyrillic + symbol
         if (this.isUseCyrillic && /[^а-яё\-]/gi.test(input)) return false;
+        if (this.isUseCyrillic && !(/[а-яё]+/gi.test(input))) return false;
 
         // length
         return !(input.length < this.minLength || input.length > this.maxLength);
