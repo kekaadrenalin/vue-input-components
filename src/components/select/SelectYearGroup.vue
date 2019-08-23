@@ -56,7 +56,7 @@
        */
       defaultValue: {
         type: String,
-        default: 'Выбрать день...'
+        default: 'Выбрать год...'
       },
 
       /**

@@ -12,7 +12,7 @@
 
 <script>
   import _ from 'lodash';
-  import wNumb from 'wNumb';
+  import wNumb from 'wnumb';
   import noUiSlider from 'nouislider';
 
   export default {

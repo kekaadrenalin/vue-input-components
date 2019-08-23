@@ -2,19 +2,47 @@
     <div class="form-group" :class="[classObject, 'field-' + idName]">
         <label class="control-label" :for="idName">{{ labelName }}</label>
         <div class="kladr-geo">
-            <input class="form-control kladr-geo__input" v-model.trim="input" :id="idName" :required="isRequired"
-                   ref="inputElement" :disabled="isDisabled || isLoad"
-                   @blur.prevent="handleOnBlur" @focus.prevent="handleOnFocus" @keydown.esc="handleKeyClickEsc"
-                   @keyup.up.prevent="handleKeyClickUp" @keyup.down.prevent="handleKeyClickDown"
-                   @keyup.enter.prevent="handleKeyClickEnter" :placeholder="placeholder">
-            <span class="kladr-geo__close" @click="handleKeyClickEsc"
-                  v-show="input.length && !isLoad && !isDisabled"></span>
+            <input
+                    class="form-control kladr-geo__input"
+                    autocomplete="off"
+
+                    :value='input'
+                    @input='evt => input = evt.target.value'
+
+                    :id="idName"
+                    :required="isRequired"
+                    :disabled="isDisabled || isLoad"
+                    :placeholder="placeholder"
+
+                    @focus.prevent="handleOnFocus"
+                    @blur.prevent="handleOnBlur"
+                    @keydown.esc="handleKeyClickEsc"
+                    @keyup.up.prevent="handleKeyClickUp"
+                    @keyup.down.prevent="handleKeyClickDown"
+                    @keyup.enter.prevent="handleKeyClickEnter"
+
+                    ref="inputElement">
+            <span
+                    class="kladr-geo__close"
+                    @click="handleKeyClickEsc"
+                    v-show="input.length && !isLoad && !isDisabled"
+            ></span>
             <span class="kladr-geo__circle" v-show="isLoad"></span>
         </div>
 
         <div class="kladr-select" v-show="resultActive">
-            <div class="kladr-select__item" :class="activeClass(i)" v-for="(item, i) in result" :key="item.id + i"
-                 v-html="getLabel(item)" @mousemove="mouseMove(i)" @click="handleKeyClickEnter"></div>
+            <div
+                    class="kladr-select__item"
+
+                    v-for="(item, i) in result"
+                    v-html="getLabel(item)"
+
+                    :class="activeClass(i)"
+                    :key="item.id + i"
+
+                    @click="handleKeyClickEnter"
+                    @mousemove="mouseMove(i)"
+            ></div>
             <div class="kladr-select__item" v-show="!result.length">Ничего не найдено</div>
         </div>
     </div>
@@ -22,10 +50,9 @@
 
 <script>
   import _ from 'lodash';
-  import axios from 'axios';
 
   export default {
-    name: 'KladrRegion',
+    name: 'KladrCity',
     data: function () {
       return {
         focusList: 0,
@@ -33,7 +60,6 @@
         resultActive: false,
         onBlur: false,
         selected: false,
-        isLoad: false,
         input: '',
         result: [],
       };
@@ -59,12 +85,16 @@
         type: String,
         required: true
       },
-      start: {
-        type: [Boolean, Number],
-        default: false
+      regionId: {
+        type: Number,
+        required: true
       },
       isDisabled: {
         type: Boolean,
+        default: true
+      },
+      start: {
+        type: [Boolean, Number],
         default: false
       }
     },
@@ -82,14 +112,26 @@
           'required': this.isRequired
         };
       },
-      oldIdRegion: function () {
-        return this.$store.getters['all/regionId'];
-      },
       resultJson: function () {
-        const regions = this.$store.getters['all/regions'];
-        if (regions.length && !this.input.length) this.result = regions;
+        let cities = this.$store.getters['all/cities'];
+        cities = {...cities}[this.regionId];
 
-        return regions;
+        if (cities && cities.length) {
+          this.result = cities;
+
+          if (this.start && this.start != this.selected) { //ToDo: проверить корректность обновления города
+            this.updateStart();
+          }
+
+          return cities;
+        }
+
+        this.result = [];
+
+        return []
+      },
+      isLoad: function () {
+        return this.regionId && !(this.resultJson).length;
       }
     },
     watch: {
@@ -100,19 +142,15 @@
         if (newInput.length === 0) {
           this.result = this.resultJson;
           this.selected = false;
-          this.$emit('change-region', false);
           this.$store.commit(this.stepStore + _.camelCase(this.idName), false);
         }
       },
-      selected: function (newId) {
-        if (newId && newId !== this.oldIdRegion) this.$store.dispatch('all/updateCities', this.selected);
+      isDisabled: function () {
+        if (this.isDisabled) this.input = '';
       },
       start: function () {
         this.updateStart();
       },
-      resultJson: function (regions) {
-        this.isLoad = !regions.length;
-      }
     },
     methods: {
       getResults: _.debounce(
@@ -126,7 +164,6 @@
 
           if (!this.result.length) {
             this.selected = false;
-            this.$emit('change-region', false);
           }
         }, 250
       ),
@@ -242,9 +279,8 @@
         this.selected = Number(item.id);
 
         this.$store.commit(this.stepStore + _.camelCase(this.idName), this.selected);
-        this.$emit('change-region', this.selected);
 
-        if (this.$refs.inputElement.focused) {
+        if (document.activeElement === this.$refs.inputElement) {
           this.$refs.inputElement.blur();
         } else {
           this.clearInput();
@@ -265,7 +301,7 @@
       },
       updateStart: function () {
         if (this.start) {
-          const _item = _.find(this.result, ['id', String(this.start)]);
+          const _item = _.find({...this.result}, ['id', String(this.start)]);
           if (_item) this.selectItem(_item);
         } else {
           this.handleKeyClickEsc();
@@ -275,4 +311,75 @@
   }
 </script>
 
-<style></style>
+<style lang="scss">
+    @import '../../assets/scss/main';
+
+    .kladr-geo {
+        position: relative;
+
+        &__input {
+            position: relative;
+            padding-right: $input-height-base + $padding-base-horizontal;
+        }
+
+        &__close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: $input-height-base;
+            width: $input-height-base;
+            color: currentColor;
+            cursor: pointer;
+
+            &::after,
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                right: 17px;
+                top: 6px;
+                width: 2px;
+                height: $input-height-base - 12px;
+                transform: rotate(45deg);
+                background: currentColor;
+            }
+
+            &::before {
+                transform: rotate(-45deg);
+            }
+        }
+
+        &__circle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: $input-height-base;
+            width: $input-height-base;
+            color: currentColor;
+            cursor: pointer;
+
+            &::after {
+                content: '';
+                position: absolute;
+                display: block;
+                top: 10%;
+                right: 10%;
+                border: 4px solid $gray-lighter;
+                border-top: 4px solid $brand-primary;
+                border-radius: 50%;
+                width: 80%;
+                height: 80%;
+                animation: spin 2s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        }
+    }
+</style>

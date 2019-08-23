@@ -10,12 +10,14 @@
             <div class="kladr-select__item" :class="activeClass(i)" v-for="(item, i) in result" :key="item.id + i"
                  v-html="getLabel(item)" @mousemove="mouseMove(i)" @click="handleKeyClickEnter"></div>
         </div>
+
+        {{parents}}
     </div>
 </template>
 
 <script>
-  import _ from 'lodash';
-  import axios from 'axios-jsonp-pro';
+  import _ from 'lodash'
+  import axios from 'axios-jsonp-pro'
 
   export default {
     name: 'kladr-input',
@@ -121,11 +123,15 @@
             return false;
           }
 
+          //console.log(params)
+
           axios.jsonp('https://kladr-api.ru/api.php', {
             params: params
           })
             .then(function (response) {
               self.setResult(response.result);
+
+              //console.log(response.result)
             })
             .catch(function (error) {
               console.log(error);

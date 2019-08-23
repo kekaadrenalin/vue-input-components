@@ -28,6 +28,7 @@
     name: 'input-phone-group',
     data: () => ({
       input: '',
+      safeMask: '[+]7 (999) 999-9999',
       onBlur: false
     }),
     props: {
@@ -44,7 +45,7 @@
        */
       mask: {
         type: String,
-        default: '+7 (999) 999-9999'
+        default: '+7 (\\999) 999-9999'
       },
 
       /**
@@ -134,7 +135,7 @@
     },
     computed: {
       inputOutput() {
-        return Inputmask.unmask(this.input, {alias: this.mask});
+        return '9' + Inputmask.unmask(this.input, {alias: this.mask});
       },
       hasError() {
         if (this.onBlur && !this.validate()) return true;
@@ -161,7 +162,7 @@
       validate() {
         if (String(this.inputOutput).length !== 10 && this.isRequired && this.onBlur) return false;
 
-        return !(!Inputmask.isValid(this.input, {alias: this.mask}) && this.onBlur);
+        return !(!Inputmask.isValid(this.input, {mask: this.safeMask}) && this.onBlur);
       },
     },
     created() {
@@ -169,7 +170,9 @@
     },
     mounted() {
       const element = this.$refs.inputElement;
-      Inputmask({'mask': this.mask}).mask(element);
+      Inputmask({mask: this.mask}).mask(element);
+
+      this.safeMask = String(this.mask).replace('+', '[+]');
     },
     beforeDestroy() {
       const element = this.$refs.inputElement;
@@ -178,5 +181,3 @@
     }
   }
 </script>
-
-<style></style>

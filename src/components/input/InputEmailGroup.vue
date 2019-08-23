@@ -26,8 +26,8 @@
   export default {
     name: 'input-email-group',
     data: () => ({
-        input: '',
-        onBlur: false,
+      input: '',
+      onBlur: false,
     }),
     props: {
       /**
@@ -185,5 +185,3 @@
     }
   }
 </script>
-
-<style></style>

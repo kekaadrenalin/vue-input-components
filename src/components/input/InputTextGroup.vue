@@ -63,6 +63,14 @@
       },
 
       /**
+       * запрет использования любых латинских символов
+       */
+      isUseNotLatin: {
+        type: Boolean,
+        default: false
+      },
+
+      /**
        * label заголовок
        */
       labelName: {
@@ -188,7 +196,10 @@
 
         // cyrillic + symbol
         if (this.isUseCyrillic && /[^а-яё\-]/gi.test(input)) return false;
-        if (this.isUseCyrillic && !(/[а-яё]+/gi.test(input))) return false;
+        if (this.isUseCyrillic && !/[а-яё]/gi.test(input)) return false;
+
+        // not-latin
+        if (this.isUseNotLatin && /[a-z]/gi.test(input)) return false;
 
         // length
         return !(input.length < this.minLength || input.length > this.maxLength);
@@ -199,5 +210,3 @@
     }
   }
 </script>
-
-<style></style>

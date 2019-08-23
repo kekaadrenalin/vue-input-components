@@ -2,11 +2,25 @@
     <div class="form-group" :class="[classObject, 'field-' + idName]">
         <label class="control-label" :for="idName">{{ labelName }}</label>
         <div class="kladr-geo">
-            <input class="form-control kladr-geo__input" v-model.trim="input" :id="idName" :required="isRequired"
-                   ref="inputElement" :disabled="isDisabled || isLoad"
-                   @blur.prevent="handleOnBlur" @focus.prevent="handleOnFocus" @keydown.esc="handleKeyClickEsc"
-                   @keyup.up.prevent="handleKeyClickUp" @keyup.down.prevent="handleKeyClickDown"
-                   @keyup.enter.prevent="handleKeyClickEnter" :placeholder="placeholder">
+            <input class="form-control kladr-geo__input"
+                   autocomplete="off"
+
+                   :value='input'
+                   @input='evt => input = evt.target.value'
+
+                   :id="idName"
+                   :required="isRequired"
+                   :disabled="isDisabled || isLoad"
+                   :placeholder="placeholder"
+
+                   @blur.prevent="handleOnBlur"
+                   @focus.prevent="handleOnFocus"
+                   @keydown.esc="handleKeyClickEsc"
+                   @keyup.up.prevent="handleKeyClickUp"
+                   @keyup.down.prevent="handleKeyClickDown"
+                   @keyup.enter.prevent="handleKeyClickEnter"
+
+                   ref="inputElement">
             <span class="kladr-geo__close" @click="handleKeyClickEsc"
                   v-show="input.length && !isLoad && !isDisabled"></span>
             <span class="kladr-geo__circle" v-show="isLoad"></span>
@@ -22,10 +36,9 @@
 
 <script>
   import _ from 'lodash';
-  import axios from 'axios';
 
   export default {
-    name: 'KladrCity',
+    name: 'KladrRegion',
     data: function () {
       return {
         focusList: 0,
@@ -33,6 +46,7 @@
         resultActive: false,
         onBlur: false,
         selected: false,
+        isLoad: false,
         input: '',
         result: [],
       };
@@ -58,12 +72,12 @@
         type: String,
         required: true
       },
-      isDisabled: {
-        type: Boolean,
-        default: true
-      },
       start: {
         type: [Boolean, Number],
+        default: false
+      },
+      isDisabled: {
+        type: Boolean,
         default: false
       }
     },
@@ -81,19 +95,14 @@
           'required': this.isRequired
         };
       },
-      resultJson: function () {
-        const cities = this.$store.getters['all/cities'];
-        if (cities.length && !this.input.length) this.result = cities;
-
-        return cities;
+      oldIdRegion: function () {
+        return this.$store.getters['all/regionId'];
       },
-      isLoad: {
-        get: function () {
-          return this.$store.getters['all/citiesLoad'];
-        },
-        set: function (value) {
-          this.$store.commit('all/citiesLoad', value);
-        }
+      resultJson: function () {
+        const regions = this.$store.getters['all/regions'];
+        if (regions.length && !this.input.length) this.result = regions;
+
+        return regions;
       }
     },
     watch: {
@@ -104,17 +113,22 @@
         if (newInput.length === 0) {
           this.result = this.resultJson;
           this.selected = false;
+          this.$emit('change-region', false);
           this.$store.commit(this.stepStore + _.camelCase(this.idName), false);
         }
       },
-      isDisabled: function () {
-        if (this.isDisabled) this.input = '';
+      selected: function (newId) {
+        if (newId && newId !== this.oldIdRegion) {
+          this.$store.dispatch('all/updateCities', this.selected).then(result => {
+            this.$store.commit('all/cities', {result: result, regionId: newId});
+          });
+        }
       },
       start: function () {
         this.updateStart();
       },
-      resultJson: function (cities) {
-        this.isLoad = !cities.length;
+      resultJson: function (regions) {
+        this.isLoad = !regions.length;
       }
     },
     methods: {
@@ -129,6 +143,7 @@
 
           if (!this.result.length) {
             this.selected = false;
+            this.$emit('change-region', false);
           }
         }, 250
       ),
@@ -244,6 +259,7 @@
         this.selected = Number(item.id);
 
         this.$store.commit(this.stepStore + _.camelCase(this.idName), this.selected);
+        this.$emit('change-region', this.selected);
 
         if (this.$refs.inputElement.focused) {
           this.$refs.inputElement.blur();
@@ -276,4 +292,42 @@
   }
 </script>
 
-<style></style>
+<style lang="scss">
+    @import '../../assets/scss/main';
+
+    .kladr-geo {
+        position: relative;
+
+        &__input {
+            position: relative;
+            padding-right: $input-height-base + $padding-base-horizontal;
+        }
+
+        &__close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: $input-height-base;
+            width: $input-height-base;
+            color: currentColor;
+            cursor: pointer;
+
+            &::after,
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                right: 17px;
+                top: 6px;
+                width: 2px;
+                height: $input-height-base - 12px;
+                transform: rotate(45deg);
+                background: currentColor;
+            }
+
+            &::before {
+                transform: rotate(-45deg);
+            }
+        }
+    }
+</style>

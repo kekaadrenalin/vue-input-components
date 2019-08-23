@@ -2,9 +2,9 @@
     <div class="form-group" :class="[classObject, 'field-' + idName]">
         <label class="control-label" :for="idName">{{ labelName }}</label>
         <select class="form-control" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
-                @focus="onBlur = true">
+                :disabled="isDisabled" @focus="onBlur = true">
             <option value="0" disabled>Выбрать...</option>
-            <option v-for="option in dataSafe" :value="option.id">{{ option.text }}</option>
+            <option v-for="option in data" :value="option.id">{{ option.text }}</option>
         </select>
     </div>
 </template>
@@ -16,7 +16,6 @@
     name: 'select-simple-group',
     data: function () {
       return {
-        dataSafe: [],
         selected: '',
         onBlur: false
       };
@@ -31,6 +30,10 @@
         default: null
       },
       isRequired: {
+        type: Boolean,
+        default: false
+      },
+      isDisabled: {
         type: Boolean,
         default: false
       },
@@ -52,7 +55,7 @@
         if (this.selected !== 0 && !this.hasError) {
           this.$store.commit(this.stepStore + _.camelCase(this.idName), this.selected);
         }
-      }
+      },
     },
     computed: {
       hasError: function () {
@@ -71,7 +74,6 @@
     },
     created: function () {
       this.selected = this.start;
-      this.dataSafe = this.data;
 
       /*
       if (null === this.selected && this.dataSafe.length) {
