@@ -10,5 +10,9 @@ import SelectYearGroup from './components/select/SelectYearGroup'
 
 import SelectSimpleGroup from './components/select/SelectSimpleGroup'
 
+import SliderGroup from './components/other/SliderGroup'
+
 export { InputTextGroup, InputTextMaskGroup, InputEmailGroup, InputPhoneGroup, InputNumberGroup }
 export { SelectDayGroup, SelectMonthGroup, SelectYearGroup, SelectSimpleGroup }
+export { SliderGroup }
+
