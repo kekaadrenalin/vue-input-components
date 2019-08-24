@@ -144,7 +144,7 @@
         self.count = Math.round(unencoded[handle]);
       });
 
-      element.noUiSlider.on('update', function (values, handle, unencoded) {
+      element.noUiSlider.on('update', function (values, handle) {
         self.currentCount = values[handle];
       });
     },
