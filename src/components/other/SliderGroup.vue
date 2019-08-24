@@ -1,10 +1,10 @@
 <template>
     <div class="form-group form-group_slider row">
-        <div class="col-xs-12 col-sm-2">
+        <div class="col-xs-12 col-sm-3 col-lg-2">
             <label class="control-label">{{ labelName }}</label>
             <span :class="classSliderTooltip">{{ currentCount }}</span>
         </div>
-        <div class="col-xs-12 col-sm-10">
+        <div class="col-xs-12 col-sm-9 col-lg-10">
             <div :id="idName" :class="classSliderBlock" ref="slider"></div>
             <input type="hidden" class="hide" ref="inputElement">
         </div>
