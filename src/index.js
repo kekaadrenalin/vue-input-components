@@ -9,10 +9,13 @@ import SelectMonthGroup from './components/select/SelectMonthGroup'
 import SelectYearGroup from './components/select/SelectYearGroup'
 
 import SelectSimpleGroup from './components/select/SelectSimpleGroup'
+import SelectAnyGroup from './components/select/SelectAnyGroup'
+import AddressKladrGroup from './components/kladr/AddressKladrGroup'
 
 import SliderGroup from './components/other/SliderGroup'
 
 export { InputTextGroup, InputTextMaskGroup, InputEmailGroup, InputPhoneGroup, InputNumberGroup }
 export { SelectDayGroup, SelectMonthGroup, SelectYearGroup, SelectSimpleGroup }
+export { SelectAnyGroup, AddressKladrGroup }
 export { SliderGroup }
 
