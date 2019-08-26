@@ -37,6 +37,7 @@
                               :start="startHouse"
                               :is-disabled="disabled"
                               :min-length="0"
+                              is-use-not-latin
                               is-required></input-text-group>
         </div>
 
