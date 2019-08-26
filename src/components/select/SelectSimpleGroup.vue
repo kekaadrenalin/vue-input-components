@@ -1,6 +1,6 @@
 <template>
     <div class="form-group" :class="[classObject, 'field-' + idName]">
-        <label class="control-label" :for="idName">{{ labelName }}</label>
+        <label class="control-label" :for="idName">{{ labelName }} <span v-if="hasError">ОШИБКА!!!</span></label>
         <select class="form-control" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
                 :disabled="isDisabled" @focus="onBlur = true">
             <option value="0" disabled>Выбрать...</option>
@@ -21,30 +21,57 @@
       };
     },
     props: {
+      /**
+       * список значений
+       */
       data: {
         type: Array,
         required: true
       },
+
+      /**
+       * начальное значение
+       */
       start: {
         type: [String, Number],
         default: null
       },
+
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * атрибут disabled
+       */
       isDisabled: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * label заголовок
+       */
       labelName: {
         type: String,
         required: true
       },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
+
+      /**
+       * префикс для vuex commit-а
+       */
       stepStore: {
         type: String,
         default: ''

@@ -2,7 +2,7 @@
     <div class="form-group" :class="[classObject, 'field-' + idName]">
         <div class="row">
             <div class="col-xs-12">
-                <label class="control-label" :for="idName">{{ labelName }}</label>
+                <label class="control-label" :for="idName">{{ labelName }} <span v-if="hasError">ОШИБКА!!!</span></label>
             </div>
             <div class="col-xs-12">
                 <select class="form-control" :id="idName" ref="inputElement" v-model="selected" :required="isRequired"
@@ -28,26 +28,49 @@
       };
     },
     props: {
+      /**
+       * список значений
+       */
       data: {
         type: Array,
         required: true
       },
+
+      /**
+       * начальное значение
+       */
       start: {
         type: [String, Number],
         default: null
       },
+
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * label заголовок
+       */
       labelName: {
         type: String,
         required: true
       },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
+
+      /**
+       * префикс для vuex commit-а
+       */
       stepStore: {
         type: String,
         default: ''

@@ -21,15 +21,6 @@
         </div>
 
         <div class="col-xs-12 col-sm-6">
-            <!--kladr-input label-name="Улица" :id-name="idPrefixSafe + 'street'"
-                         content-type="street"
-                         :parents="parents"
-                         :step-store="stepStore"
-                         :ref="idPrefixSafe + 'street'"
-                         :start="startStreet"
-                         :is-disabled="disabled"
-                         is-required></kladr-input-->
-
             <input-text-group label-name="Улица" :id-name="idPrefixSafe + 'street'"
                               :step-store="stepStore"
                               :ref="idPrefixSafe + 'street'"
@@ -76,7 +67,6 @@
   import InputTextGroup from "../input/InputTextGroup";
   import KladrRegion from "./KladrRegion";
   import KladrCity from "./KladrCity";
-  // import KladrInput from "./KladrInput";
 
   export default {
     name: 'address-kladr-group',
@@ -89,38 +79,73 @@
       };
     },
     props: {
+      /**
+       * префикс для всех id
+       */
       idPrefix: {
         type: String,
         default: 'address'
       },
+
+      /**
+       * префикс для vuex commit-а
+       */
       stepStore: {
         type: String,
         default: 'address'
       },
+
+      /**
+       * стартовый id региона
+       */
       startRegion: {
         type: [Number, Boolean],
         default: false
       },
+
+      /**
+       * стартовый id города
+       */
       startCity: {
         type: [Number, Boolean],
         default: false
       },
+
+      /**
+       * стартовое значение улицы
+       */
       startStreet: {
         type: [String],
         default: ''
       },
+
+      /**
+       * стартовое значение дома
+       */
       startHouse: {
         type: [String],
         default: ''
       },
+
+      /**
+       * стартовое значение корпуса
+       */
       startStructure: {
         type: [String],
         default: ''
       },
+
+      /**
+       * стартовое значение квартиры
+       */
       startFlat: {
         type: [String],
         default: ''
       },
+
+      /**
+       * атрибут disabled
+       */
       disabled: {
         type: Boolean,
         default: false
@@ -128,27 +153,12 @@
     },
     computed: {
       regionStore() {
+        // ToDo: доделать проверку
         return this.$store.getters[this.stepStore + _.camelCase(this.idPrefixSafe + 'region')]
       },
-      /*
-      cityStore() {
-        return this.$store.getters[this.stepStore + _.camelCase(this.idPrefixSafe + 'city')]
-      },
-      */
       regionId() {
         return this.regionStore.value || 0;
       },
-      /*
-      cityId() {
-        return this.cityStore.value || 0;
-      },
-      parents() {
-        return {
-          region: this.regionId,
-          city: this.cityId,
-        }
-      },
-      */
     },
     methods: {
       changeRegion: function (id) {
@@ -159,7 +169,6 @@
       this.idPrefixSafe = this.idPrefix + '-';
     },
     components: {
-      // KladrInput,
       KladrRegion,
       KladrCity,
       InputTextGroup,

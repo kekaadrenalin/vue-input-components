@@ -15,7 +15,7 @@ import AddressKladrGroup from './components/kladr/AddressKladrGroup'
 import SliderGroup from './components/other/SliderGroup'
 
 export { InputTextGroup, InputTextMaskGroup, InputEmailGroup, InputPhoneGroup, InputNumberGroup }
-export { SelectDayGroup, SelectMonthGroup, SelectYearGroup, SelectSimpleGroup }
-export { SelectAnyGroup, AddressKladrGroup }
+export { SelectDayGroup, SelectMonthGroup, SelectYearGroup }
+export { SelectSimpleGroup, SelectAnyGroup }
+export { AddressKladrGroup }
 export { SliderGroup }
-

@@ -1,6 +1,6 @@
 <template>
     <div class="form-group" :class="[classObject, 'field-' + idName]">
-        <label class="control-label" :for="idName">{{ labelName }}</label>
+        <label class="control-label" :for="idName">{{ labelName }} <span v-if="hasError">ОШИБКА!!!</span></label>
         <div class="kladr-geo">
             <input
                     class="form-control kladr-geo__input"
@@ -65,34 +65,65 @@
       };
     },
     props: {
+      /**
+       * обязательное ли поле
+       */
       isRequired: {
         type: Boolean,
         default: false
       },
+
+      /**
+       * атрибут placeholder
+       */
       placeholder: {
         type: String,
-        default: ''
+        default: 'Начните вводить первые буквы...'
       },
+
+      /**
+       * label заголовок
+       */
       labelName: {
         type: String,
         required: true
       },
+
+      /**
+       * атрибут id
+       */
       idName: {
         type: String,
         required: true
       },
+
+      /**
+       * префикс для vuex commit-а
+       */
       stepStore: {
         type: String,
         required: true
       },
+
+      /**
+       * id региона
+       */
       regionId: {
         type: Number,
         required: true
       },
+
+      /**
+       * атрибут disabled
+       */
       isDisabled: {
         type: Boolean,
         default: true
       },
+
+      /**
+       * стартовый id города
+       */
       start: {
         type: [Boolean, Number],
         default: false

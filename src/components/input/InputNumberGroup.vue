@@ -1,6 +1,6 @@
 <template>
     <div :class="[classObject, classWrap, 'field-' + idName]">
-        <label :class="classLabel" :for="idName">{{ labelName }}</label>
+        <label :class="classLabel" :for="idName">{{ labelName }} <span v-if="hasError">ОШИБКА!!!</span></label>
 
         <input type="number"
 
