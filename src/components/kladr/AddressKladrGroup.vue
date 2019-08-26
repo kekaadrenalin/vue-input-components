@@ -26,6 +26,7 @@
                               :ref="idPrefixSafe + 'street'"
                               :start="startStreet"
                               :is-disabled="disabled"
+                              is-use-not-latin
                               is-required></input-text-group>
         </div>
 
